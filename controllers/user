@@ -1,9 +1,13 @@
-// Import du package bcrypt
+// Import du package bcrypt pour le hachage du mot de passe
 const bcrypt = require('bcrypt');
-// Inclusion du model User
+// Import du package d'encodage du token
+const jwt = require('jsonwebtoken');
+// Inclusion du modèle User
 const User = require('../models/User');
 
+// Fonction de création d'un nouvel utilisateur
 exports.signup = (req, res, next) => {
+    // Hachage du mot de passe avec bcrypt
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
@@ -11,40 +15,42 @@ exports.signup = (req, res, next) => {
                 password: hash
             });
             user.save()
-                .then(() => res.status(201).json({message : 'Utilisateur crée'}))
+                .then(() => res.status(201).json({message : 'Utilisateur crée !'}))
                 .catch(error => res.status(400).json({error}))
         })
         .catch(error => res.status(500).json({error}))
 };
 
+// Fonction de connection d'un utilisateur existant
 exports.login = (req, res, next) => {
     // Filtre sur l'email rentré par le client
     User.findOne({ email: req.body.email })
         .then(user => {
-            // Cas où l'utilisateur n'existe pas dans la BDD
+            // Cas où le user n'existe pas dans la BDD
             if (user === null) {
                 return res.status(401).json({ message: 'Paire login/mot de passe incorrecte'});
-            }
-            // Cas où l'utilisateur existe dans la BDD,
-            else {
-                // Comparaison du MDP entré par le client avec ce qui est stocké dans la BDD 
+            } else {
+                // Cas où le user existe dans la BDD : comparaison du MDP entré par le client avec ce qui est stocké dans la BDD 
                 bcrypt.compare(req.body.password, user.password)
                     .then(valid => {
                         // Cas où le MDP transmis n'est pas correct 
                         if (!valid) {
                             return res.status(401).json({ message: 'Paire login/mot de passe incorrecte' });
-                        }
-                        // Cas où le MDP transmis est correct : génération d'un Token
-                        else {
+                        } else {
+                            // Cas où le MDP transmis est correct : génération d'un Token
                             res.status(200).json({
                                 userId: user._id,
-                                token: 'TOKEN'
+                                token: jwt.sign(
+                                    { userId: user._id },
+                                    'RANDOM_TOKEN_SECRET',
+                                    { expiresIn: '24h' }
+                                )
                             })
-                        };
+                        }
                     })
                     // Erreur d'exécution de la requête de la BDD
                     .catch(error => res.status(500).json({error}))
-            };
+            }
         })
         // Erreur d'exécution de la requête de la BDD
         .catch(error => res.status(500).json({error}));
