@@ -3,8 +3,8 @@ const express = require('express');
 // Inclusion de Mongoose
 const mongoose = require('mongoose');
 // Import du router
-
 const userRoutes = require('./routes/user');
+const sauceRoutes = require('./routes/sauce')
 
 // Création de l'app Expres
 const app = express();
@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 });
 
 // Pour la route donnée : utiliser la logique écrite dans userRoutes
-
 app.use('/api/auth', userRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 module.exports = app;

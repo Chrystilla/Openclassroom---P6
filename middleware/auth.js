@@ -1,8 +1,10 @@
+// Import des Json Web Token pour la vérification à l'authentification
 const jwt = require('jsonwebtoken');
- 
+
+// 
 module.exports = (req, res, next) => {
    try {
-        // Récupération du token & split pour ne garder que la chaîne de caractère
+        // Récupération du token & split pour ne garder que la chaîne de caractère se trouvant après "bearer"
         const token = req.headers.authorization.split(' ')[1];
         // Décodage du token
         const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
