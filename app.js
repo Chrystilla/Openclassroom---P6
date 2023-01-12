@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 // Import du router
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce')
+// Import de path pour accéder au path du serveur
+const path = require('path');
 
 // Création de l'app Expres
 const app = express();
@@ -18,6 +20,8 @@ mongoose.connect('mongodb+srv://Chrystilla:Piiquante2023@cluster0.ogxhgla.mongod
 
 //Interception de toutes les requêtes contenant du json
 app.use(express.json());
+// Rend la route image statique
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //Bypass de la sécurité CORS (2 serveurs différents)
 app.use((req, res, next) => {
@@ -27,8 +31,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Pour la route donnée : utiliser la logique écrite dans userRoutes
+// Pour la route donnée : utiliser la logique écrite dans userRoutes et sauceRoutes
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
+
 
 module.exports = app;
