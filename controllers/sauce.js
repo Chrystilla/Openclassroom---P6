@@ -90,4 +90,49 @@ exports.deleteSauce = (req, res, next) => {
 
 // Fonction de like d'une sauce
 exports.likeSauce = (req, res, next) => {
+    // Traite chaque cas de valeur du like de la requête : 0, 1 ou -1
+    switch (req.body.like) {
+        // Dans le cas d'un like (à 1)
+        case 1:
+            // Si le like passe a 1 : met a jour le nombre de like avec $inc et ajoute l'id de l'user dans le tableau des usersLiked avec $push
+            Sauce.updateOne (
+                {_id: req.params.id},
+                {$inc: { likes: 1 }, $push: { usersLiked: req.body.userId }})
+                    .then(() => res.status(200).json({message : 'Like donné!'}))
+                    .catch(error => res.status(401).json({ error }));
+        break;
+        // Dans le cas d'un like (à -1)
+        case -1:
+            // Si le like passe a -1 : met a jour le nombre de dislike avec $inc et ajoute l'id de l'user dans le tableau des usersdisLiked avec $push
+            Sauce.updateOne (
+                {_id: req.params.id},
+                {$inc: { dislikes: 1 }, $push: { usersDisliked: req.body.userId }})
+                    .then(() => res.status(200).json({message : 'Dislike donné!'}))
+                    .catch(error => res.status(401).json({ error }));
+        break;
+        // Dans le cas ou un like ou un dislike est retiré (est à 0) 
+        case 0:
+            // Trouve la sauce dans la base de donnée
+             Sauce.findOne({_id: req.params.id})
+                .then((sauce) => {
+                    // si l'user est déjà dans le tableau des usersLiked : retire un like au compteur des likes avec $inc et supprime l'user du tableau des likes avec $pull
+                    if (sauce.usersLiked.includes(req.body.userId)) {
+                        Sauce.updateOne (
+                            {_id: req.params.id},
+                            {$inc: { likes: -1 }, $pull: { usersLiked: req.body.userId }})
+                                .then(() => res.status(200).json({message : 'Like retiré!'}))
+                                .catch(error => res.status(401).json({ error }));
+                    }
+                    // si l'user est déjà dans le tableau des usersdisLiked : retire un dislike au compteur des dislikes avec $inc et supprime l'user du tableau des dislikes avec $pull
+                    else if (sauce.usersDisliked.includes(req.body.userId)) {
+                        Sauce.updateOne (
+                            {_id: req.params.id},
+                            {$inc: { dislikes: -1 }, $pull: { usersDisliked: req.body.userId }})
+                                .then(() => res.status(200).json({message : 'DisLike retiré!'}))
+                                .catch(error => res.status(401).json({ error }));
+                    }
+                })
+                .catch((error) => res.status(400).json({error}))
+        break;
+    }
 };
