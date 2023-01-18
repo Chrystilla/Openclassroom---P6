@@ -14,7 +14,6 @@ const sauceSchema = mongoose.Schema({
     dislikes: { type: Number},
     usersLiked: { type: [String]},
     usersDisliked: { type: [String]},
-
 });
 
 // Création et export du modèle Sauce utilisant le schema sauceSchema

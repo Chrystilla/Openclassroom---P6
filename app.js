@@ -1,14 +1,14 @@
-// Inclusion de Express
+// Import de Express
 const express = require('express');
-// Inclusion de Mongoose
+// Import de Mongoose
 const mongoose = require('mongoose');
-// Import du router
+// Import des routers
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce')
 // Import de path pour accéder au path du serveur
 const path = require('path');
 
-// Création de l'app Expres
+// Création de l'app Express
 const app = express();
 
 // Connection à la BDD mongoDB

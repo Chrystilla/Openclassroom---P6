@@ -1,10 +1,10 @@
-// Inclusion de Express
+// Import d'Express
 const express = require('express');
-// Inclusion du middleware d'authentification
+// Import du middleware d'authentification
 const auth = require('../middleware/auth')
-// Inclusion du middleware multer
+// Import du middleware multer
 const multer = require('../middleware/multer-config')
-// Inclusion du controller
+// Import du fichier controller
 const sauceCtrl = require('../controllers/sauce.js');
 
 // Création d'un router
