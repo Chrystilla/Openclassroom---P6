@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
         // Récupération du token & split pour ne garder que la chaîne de caractère se trouvant après "bearer"
         const token = req.headers.authorization.split(' ')[1];
         // Décodage du token
-        const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+        const decodedToken = jwt.verify(token, process.env.KEY);
         // Récupération de la propriété userId du Token
         const userId = decodedToken.userId;
         // Ajout de l'ID utilisateur à l’objet Request afin que nos différentes routes puissent l’exploiter

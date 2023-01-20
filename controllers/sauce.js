@@ -50,19 +50,19 @@ exports.modifySauce = (req, res, next) => {
     delete sauceObject._userId
     // Recherche de l'objet dans la BDD
     Sauce.findOne({_id: req.params.id})
-    .then((sauce) => {
-        // vérifier que l'objet appartient bien au user de la requête 
-        if (sauce.userId != req.auth.userId) {
-            res.status(401).json({ message : 'Non-autorisé'});
-        } else {
-            Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
-            .then(() => res.status(200).json({message : 'Objet modifié!'}))
-            .catch(error => res.status(401).json({ error }));
-        }
-    })
-    .catch((error) => {
-        res.status(400).json({ error });
-    });
+        .then((sauce) => {
+            // vérifier que l'objet appartient bien au user de la requête 
+            if (sauce.userId != req.auth.userId) {
+                res.status(401).json({ message : 'Non-autorisé'});
+            } else {
+                Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
+                .then(() => res.status(200).json({message : 'Objet modifié!'}))
+                .catch(error => res.status(401).json({ error }));
+            }
+        })
+        .catch((error) => {
+            res.status(400).json({ error });
+        });
 };
 
 // Fonction de suppression d'une sauce
@@ -136,3 +136,4 @@ exports.likeSauce = (req, res, next) => {
         break;
     }
 };
+    

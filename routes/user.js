@@ -1,11 +1,15 @@
-// Inclusion de Express
+// Import des modules nécessaires
 const express = require('express');
+const apiLimiter = require('../middleware/api.limiter')
+const userValidation = require('../middleware/user.validation')
+const userCtrl = require('../controllers/user');
+
 // Création d'un router
 const router = express.Router();
 
-const userCtrl = require('../controllers/user');
 
-router.post('/signup', userCtrl.signup);
-router.post('/login', userCtrl.login);
+
+router.post('/signup', apiLimiter, userValidation, userCtrl.signup);
+router.post('/login', apiLimiter, userCtrl.login);
 
 module.exports = router;

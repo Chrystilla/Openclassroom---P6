@@ -1,18 +1,18 @@
-// Import de Express
+// Import des modules nécessaires
 const express = require('express');
-// Import de Mongoose
 const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config()
+
+// Initialisation de l'API
+const app = express();
+
 // Import des routers
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce')
-// Import de path pour accéder au path du serveur
-const path = require('path');
-
-// Création de l'app Express
-const app = express();
 
 // Connection à la BDD mongoDB
-mongoose.connect('mongodb+srv://Chrystilla:Piiquante2023@cluster0.ogxhgla.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.MONGODB_URI,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -34,6 +34,5 @@ app.use((req, res, next) => {
 // Pour la route donnée : utiliser la logique écrite dans userRoutes et sauceRoutes
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
-
 
 module.exports = app;
