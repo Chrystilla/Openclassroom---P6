@@ -1,7 +1,6 @@
 // Import des Json Web Token pour la vérification à l'authentification
 const jwt = require('jsonwebtoken');
-
-// 
+ 
 module.exports = (req, res, next) => {
    try {
         // Récupération du token & split pour ne garder que la chaîne de caractère se trouvant après "bearer"

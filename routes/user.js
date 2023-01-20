@@ -7,8 +7,6 @@ const userCtrl = require('../controllers/user');
 // Création d'un router
 const router = express.Router();
 
-
-
 router.post('/signup', apiLimiter, userValidation, userCtrl.signup);
 router.post('/login', apiLimiter, userCtrl.login);
 

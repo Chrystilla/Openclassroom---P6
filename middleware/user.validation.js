@@ -11,7 +11,6 @@ const rules = joi.object({
 	password: joi.string().min(6).trim(true).required(),
 });
 
-
 const userValidation = async (req, res, next) => {
     // User à valider
 	const userToValidate = {

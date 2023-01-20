@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-require('dotenv').config()
+require('dotenv').config();
 
 // Initialisation de l'API
 const app = express();
