@@ -46,4 +46,5 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
+// Démarre le serveur
 server.listen(port);
